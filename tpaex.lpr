@@ -3,24 +3,10 @@ library tpaex;
 {$mode objfpc}{$H+}
 
 uses
-  sysutils, tpa, types;
+  sysutils, tpa, types, files;
 
 {$I simbaplugin.inc}
 
-procedure Lape_NRSplitTPA(const Params: PParamArray; const Result: Pointer); cdecl;
-begin
-  P2DPointArray(Result)^ := NRSplitTPA(PPointArray(Params^[0])^, PSingle(Params^[1])^, PSingle(Params^[2])^);
-end;
-
-procedure Lape_NRClusterTPA(const Params: PParamArray; const Result: Pointer); cdecl;
-begin
-  P2DPointArray(Result)^ := NRClusterTPA(PPointArray(Params^[0])^, PSingle(Params^[1])^);
-end;
-
-procedure Lape_SkeletonTPA(const Params: PParamArray; const Result: Pointer); cdecl;
-begin
-  PPointArray(Result)^ := SkeletonTPA(PPointArray(Params^[0])^, PInt32(Params^[1])^, PInt32(Params^[2])^);
-end;
 
 procedure Lape_TPAMatrix(const Params: PParamArray; const Result: Pointer); cdecl;
 begin
@@ -37,11 +23,20 @@ begin
   PPointArray(Result)^ := AStarTPA(PPointArray(Params^[0])^, PPoint(Params^[1])^, PPoint(Params^[2])^, PBoolean(Params^[3])^);
 end;
 
+procedure Lape_FileReadBytes(const Params: PParamArray; const Result: Pointer); cdecl;
 begin
-  addGlobalFunc('function NRSplitTPA(const arr: TPointArray; w, h: Single): T2DPointArray; native;', @Lape_NRSplitTPA);
-  addGlobalFunc('function NRClusterTPA(const TPA: TPointArray; dist: Single): T2DPointArray; native;', @Lape_NRClusterTPA);
-  addGlobalFunc('function SkeletonTPA(tpa: TPointArray; fMin, fMax: Int32): TPointArray; native;', @Lape_SkeletonTPA);
+  PByteArray(Result)^ := FileReadBytes(PString(Params^[0])^);
+end;
+
+procedure Lape_FileReadBytesRange(const Params: PParamArray; const Result: Pointer); cdecl;
+begin
+  PByteArray(Result)^ := FileReadBytesRange(PString(Params^[0])^, PInteger(Params^[1])^, PInteger(Params^[2])^);
+end;
+
+begin
   addGlobalFunc('function TPAMatrix(tpa: TPointArray): TBooleanMatrix; native;', @Lape_TPAMatrix);
   addGlobalFunc('function AStarTPAEx(tpa: TPointArray; out paths: TSingleMatrix; start, goal: TPoint; diagonalTravel: Boolean): TPointArray; native;', @Lape_AStarTPAEx);
   addGlobalFunc('function AStarTPA(tpa: TPointArray; start, goal: TPoint; diagonalTravel: Boolean): TPointArray; native;', @Lape_AStarTPA);
+  addGlobalFunc('function OpenFileReadBytes(filename: String): TByteArray; native;', @Lape_FileReadBytes);
+  addGlobalFunc('function OpenFileReadBytesRange(filename: String; start, finish: Integer): TByteArray; native;', @Lape_FileReadBytesRange);
 end.

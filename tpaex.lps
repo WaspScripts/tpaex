@@ -10,19 +10,29 @@
         <Filename Value="tpaex.lpr"/>
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos X="23" Y="6"/>
-        <FoldState Value=" T3J033 T1K023F"/>
-        <UsageCount Value="52"/>
+        <EditorIndex Value="2"/>
+        <CursorPos Y="35"/>
+        <FoldState Value=" T3A032o"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="tpa.pas"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="73"/>
-        <CursorPos X="44" Y="86"/>
-        <FoldState Value=" TCj7F3 T6jB076 PEoZ0 T1mg2B1 picjL044 PiGiS]O0jO4{u4 pjViBA{08]AOkM668]Z8jd2 T3me0{M6]P7lQ0L TMqR21Z"/>
-        <UsageCount Value="51"/>
+        <TopLine Value="47"/>
+        <CursorPos X="28" Y="68"/>
+        <UsageCount Value="54"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="files.pas"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="36"/>
+        <CursorPos X="58" Y="60"/>
+        <FoldState Value=" T4H01 T3iG0d T6Q03]E1iM0X T0iP231K"/>
+        <UsageCount Value="23"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="asyncdownload.lpr"/>
@@ -42,8 +52,8 @@
       <Unit>
         <Filename Value="simbaplugin.inc"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="20"/>
-        <CursorPos X="13" Y="24"/>
+        <TopLine Value="30"/>
+        <CursorPos X="36" Y="45"/>
         <UsageCount Value="29"/>
       </Unit>
       <Unit>
@@ -99,11 +109,10 @@
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="1455"/>
-        <CursorPos Y="1479"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="91"/>
+        <CursorPos X="22" Y="108"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\Simba\Source\MML\simba.files.pas"/>
@@ -120,133 +129,167 @@
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1005"/>
         <CursorPos X="7" Y="1017"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\math.pp"/>
+        <UnitName Value="Math"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="127"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win32\classes.pp"/>
+        <UnitName Value="Classes"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="21" Y="17"/>
+        <FoldState Value=" TL00D T4O081 TCiEa[843iZ0H6 PiUjM0 TGia0G]N6jO22]81jR2U4 PTiV2 T0jV8D2U"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\sysutils.pp"/>
+        <UnitName Value="SysUtils"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="22" Y="8"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysutilh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="20"/>
+        <CursorPos X="27" Y="37"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\sysosh.inc"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="3" Y="22"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1481" Column="18" TopLine="1465"/>
+        <Filename Value="files.pas"/>
+        <Caret Line="7" Column="16"/>
       </Position>
       <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1466" Column="20" TopLine="1465"/>
+        <Filename Value="files.pas"/>
+        <Caret Line="19" Column="3"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="7" Column="23" TopLine="2"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="11" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="18" Column="6"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="17" TopLine="17"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="54" Column="5" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="33" Column="20"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="26" Column="14" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="52" Column="60"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="23" Column="89" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="22" Column="78" TopLine="19"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="15" Column="20" TopLine="2"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="22" Column="33" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="104" Column="5"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="56" Column="28" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="35" Column="5" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="56" Column="27" TopLine="28"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="35" Column="13" TopLine="21"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="56" Column="33" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="61" Column="22" TopLine="39"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="51" Column="24" TopLine="32"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="63" Column="84" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="27" Column="29" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="47" Column="33" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="48" Column="37" TopLine="18"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="39" Column="28" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="50" Column="26" TopLine="26"/>
+      </Position>
+      <Position>
+        <Filename Value="files.pas"/>
+        <Caret Line="60" Column="58" TopLine="36"/>
       </Position>
       <Position>
         <Filename Value="tpaex.lpr"/>
-        <Caret Line="10" Column="20" TopLine="2"/>
-      </Position>
-      <Position>
-        <Filename Value="tpaex.lpr"/>
-        <Caret Line="11" Column="56"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1466" Column="10" TopLine="1450"/>
-      </Position>
-      <Position>
-        <Filename Value="tpaex.lpr"/>
-        <Caret Line="6" Column="32"/>
-      </Position>
-      <Position>
-        <Filename Value="tpaex.lpr"/>
-        <Caret Line="10" Column="28"/>
-      </Position>
-      <Position>
-        <Filename Value="tpaex.lpr"/>
-        <Caret Line="13"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1016" Column="10" TopLine="1000"/>
-      </Position>
-      <Position>
-        <Filename Value="tpaex.lpr"/>
-        <Caret Line="12" Column="38"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1016" Column="10" TopLine="1000"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1019" Column="27" TopLine="1000"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1016" Column="162" TopLine="1000"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="874" Column="58" TopLine="859"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1016" Column="162" TopLine="990"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1007" Column="95" TopLine="990"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="878" Column="19" TopLine="864"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\wininc\redef.inc"/>
-        <Caret Line="1017" Column="7" TopLine="1005"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1434" Column="36" TopLine="1418"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1431" Column="68" TopLine="1418"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1434" Column="150" TopLine="1418"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1440" Column="144" TopLine="1418"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1450" Column="36" TopLine="1427"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1452" Column="35" TopLine="1427"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1453" Column="36" TopLine="1427"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1459" Column="152" TopLine="1433"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1460" Column="159" TopLine="1434"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1466" Column="152" TopLine="1440"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1467" Column="159" TopLine="1441"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
-        <Caret Line="1475" Column="140" TopLine="1449"/>
+        <Caret Line="34" Column="140"/>
       </Position>
     </JumpHistory>
     <RunParams>
