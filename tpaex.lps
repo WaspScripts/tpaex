@@ -3,7 +3,7 @@
   <ProjectSession>
     <PathDelim Value="\"/>
     <Version Value="12"/>
-    <ManyBuildModesSelection Value="WIN64,WIN32"/>
+    <ManyBuildModesSelection Value="WIN64,WIN32,LINUX64,LINUX-AARCH64,MACOS,MACOS-AARCH64"/>
     <BuildModes Active="WIN32"/>
     <Units>
       <Unit>
@@ -11,8 +11,8 @@
         <IsPartOfProject Value="True"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <CursorPos Y="35"/>
-        <FoldState Value=" T3A032o"/>
+        <CursorPos X="73" Y="37"/>
+        <FoldState Value=" T3A034 PCK0t"/>
         <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit>
