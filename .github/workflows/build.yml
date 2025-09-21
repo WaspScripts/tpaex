@@ -38,7 +38,7 @@ jobs:
             binary: libtpaex64.so.aarch64
             
           - name: MacOS 64
-            os: macos-latest
+            os: macos-latest-large
             build-mode: MACOS
             binary: libtpaex64.dylib
 
@@ -56,6 +56,12 @@ jobs:
         with:
           laz: ${{ env.LAZ_VER }}
           fpc: ${{ env.FPC_VER }}
+      
+      - name: Install ARM64 cross toolchain
+        if: matrix.config.build-mode == 'LINUX-AARCH64'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu
           
       - name: Build Library tpaex
         run: |
