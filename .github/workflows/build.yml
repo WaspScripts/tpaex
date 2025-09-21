@@ -21,47 +21,59 @@ jobs:
             os: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-            
+            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%202.0.12/lazarus-2.0.12-fpc-3.2.0-win64.exe
+
           - name: Windows 32
             os: windows-latest
             build-mode: WIN32
             binary: libtpaex32.dll
+            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%202.0.12/lazarus-2.0.12-fpc-3.2.0-win32.exe
 
           - name: Linux 64
             os: ubuntu-latest
             build-mode: LINUX64
             binary: libtpaex64.so
+            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/lazarus-project_2.0.12-0_amd64.deb 
+            fpc-url: |
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-laz_3.2.0-1_amd64.deb
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-src_3.2.0-1_amd64.deb
           
           - name: Linux AArch64  
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
+            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/lazarus-project_2.0.12-0_amd64.deb 
+            fpc-url: |
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-laz_3.2.0-1_amd64.deb
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-src_3.2.0-1_amd64.deb
             
           - name: MacOS 64
-            os: macos-latest-large
+            os: macos-latest
             build-mode: MACOS
             binary: libtpaex64.dylib
+            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/Lazarus-2.0.12-x86_64-macosx.pkg
+            fpc-url: |
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-3.2.0.intel-macosx.dmg
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-src-3.2.0-2-laz.pkg  
 
           - name: MacOS AArch64
             os: macos-latest
             build-mode: MACOS-AARCH64
             binary: libtpaex64.dylib.aarch64
+            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/Lazarus-2.0.12-x86_64-macosx.pkg
+            fpc-url: |
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-3.2.0.intel-macosx.dmg
+              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-src-3.2.0-2-laz.pkg  
          
     steps:
       - name: checkout
         uses: actions/checkout@v4.2.2
       
       - name: Install Lazarus
-        uses: WaspScripts/setup-lazarus-fpcup@v3.3
+        uses: ollydev/setup-lazarus@v2
         with:
-          laz: ${{ env.LAZ_VER }}
-          fpc: ${{ env.FPC_VER }}
-      
-      - name: Install ARM64 cross toolchain
-        if: matrix.config.build-mode == 'LINUX-AARCH64'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu
+          laz-url: ${{ matrix.config.laz-url }}
+          fpc-url: ${{ matrix.config.fpc-url }}
           
       - name: Build Library tpaex
         run: |
