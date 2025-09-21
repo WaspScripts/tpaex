@@ -7,64 +7,29 @@ on:
       
 jobs:
   build:
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        config:            
-          - name: Windows 64
-            os: windows-latest
-            build-mode: WIN64
-            binary: libtpaex64.dll
-            
-          - name: Windows 32
-            os: windows-latest
-            build-mode: WIN32
-            binary: libtpaex32.dll
-
-          - name: Linux 64
-            os: ubuntu-latest
-            build-mode: LINUX64
-            binary: libtpaex64.so
-          
-          - name: Linux AArch64  
-            os: ubuntu-latest
-            build-mode: LINUX-AARCH64
-            binary: libtpaex64.so.aarch64
-            
-          - name: MacOS 64
-            os: macos-latest
-            build-mode: MACOS
-            binary: libtpaex64.dylib
-
-          - name: MacOS AArch64
-            os: macos-latest
-            build-mode: MACOS-AARCH64
-            binary: libtpaex64.dylib.aarch64
-         
+        target:
+          - { mode: LINUX64,    bin: libtpaex64.so }
+          - { mode: LINUX-AARCH64, bin: libtpaex64.so.aarch64 }
+          - { mode: WIN64,      bin: libtpaex64.dll }
+          - { mode: WIN32,      bin: libtpaex32.dll }
     steps:
-      - name: checkout
-        uses: actions/checkout@v4.2.2
+      - uses: actions/checkout@v4.2.2
       
-      - uses: sxmxta/lazarus@v1.0.18
-        with:
-          lazarus-version: "2.2.4"
-          with-cache: false
-      
-      - name: Install FPC 32-bit
-        if: matrix.config.build-mode == 'WIN32'
+      - name: Install deps
         run: |
-          curl -L -o fpc32.exe https://downloads.sourceforge.net/project/freepascal/Win32/3.2.2/fpc-3.2.2.i386-win32.exe
-          fpc32.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
-          echo "C:\FPC\3.2.2\bin\i386-win32" >> $env:GITHUB_PATH
-          
-      - name: Build Library tpaex
-        run: |
-          lazbuild --build-mode=${{ matrix.config.build-mode }} tpaex.lpi
+          sudo apt-get update
+          sudo apt-get install -y fpc fpc-src lazarus \
+              gcc-multilib gcc-mingw-w64-i686 gcc-mingw-w64-x86-64
 
-      - name: Upload Binary 
+      - name: Build ${{ matrix.target.mode }}
+        run: lazbuild --build-mode=${{ matrix.target.mode }} tpaex.lpi
+
+      - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.config.binary }}
-          path: ${{ matrix.config.binary }}
+          name: ${{ matrix.target.bin }}
+          path: ${{ matrix.target.bin }}
