@@ -49,7 +49,7 @@ jobs:
          
     steps:
       - name: checkout
-      - uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v4.2.2
       
       - name: Install Lazarus + FPC (Linux)
         if: runner.os == 'Linux'
