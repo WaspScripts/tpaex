@@ -12,12 +12,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:             
+        config:           
           - name: Windows 64
             os: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-           
+          
           - name: Windows 32
             os: windows-latest
             build-mode: WIN32
@@ -27,8 +27,8 @@ jobs:
             os: ubuntu-latest
             build-mode: LINUX64
             binary: libtpaex64.so
-           
-          - name: Linux AArch64  
+          
+          - name: Linux AArch64  
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
