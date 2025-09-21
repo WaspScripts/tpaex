@@ -1,6 +1,6 @@
 name: Build
 
-on: 
+on:
   push:
     branches:
       - main
@@ -82,7 +82,7 @@ jobs:
         run: |
           lazbuild --build-mode=${{ matrix.config.build-mode }} tpaex.lpi
 
-      - name: Upload Binary 
+      - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.config.binary }}
