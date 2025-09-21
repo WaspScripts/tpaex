@@ -60,9 +60,8 @@ jobs:
 
           case "${{ runner.os }}" in
             Windows)
-              curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-win64.zip" -o "${FPCCUP_DIR}/fpcupdeluxe.zip"
-              unzip -q "${FPCCUP_DIR}/fpcupdeluxe.zip" -d "${FPCCUP_DIR}"
-              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe"
+              powershell -command "Invoke-WebRequest -Uri 'https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-win64.zip' -OutFile '${FPCCUP_DIR}/fpcupdeluxe.zip'; Expand-Archive -Path '${FPCCUP_DIR}/fpcupdeluxe.zip' -DestinationPath '${FPCCUP_DIR}' -Force"
+              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe.exe"
               ;;
             Linux)
               curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-linux" -o "${FPCCUP_DIR}/fpcupdeluxe"
