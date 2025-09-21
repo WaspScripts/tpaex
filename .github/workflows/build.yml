@@ -17,7 +17,7 @@ jobs:
             os: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-           
+
           - name: Windows 32
             os: windows-latest
             build-mode: WIN32
@@ -27,12 +27,12 @@ jobs:
             os: ubuntu-latest
             build-mode: LINUX64
             binary: libtpaex64.so
-           
+
           - name: Linux AArch64  
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
-               
+
           - name: MacOS 64
             os: macos-latest
             build-mode: MACOS
@@ -42,49 +42,35 @@ jobs:
             os: macos-latest
             build-mode: MACOS-AARCH64
             binary: libtpaex64.dylib.aarch64
-          
+
     steps:
       - name: checkout
         uses: actions/checkout@v4.2.2
-      
+
       - name: Install FPC and Lazarus on Windows
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          # Use Chocolatey to install the required versions
           choco install fpc --version=3.2.2
           choco install lazarus --version=2.2.4
 
       - name: Install FPC and Lazarus on Linux
         if: runner.os == 'Linux'
         run: |
-          # The standard repositories often have older versions, so we download the
-          # .deb files directly from the Lazarus project and install them.
-          # For cross-compilation to AArch64, we also install the cross-compiler package.
           sudo apt-get update
-          
           if [ "${{ matrix.config.build-mode }}" == "LINUX-AARCH64" ]; then
-            # Add architecture for cross-compilation
             sudo dpkg --add-architecture arm64
             sudo apt-get update
-            # Install FPC cross-compiler
             sudo apt-get install -y fpc-3.2.2-cross-aarch64
           else
-            # Install standard FPC for the host architecture
             sudo apt-get install -y fpc-3.2.2
           fi
-          
-          # Install Lazarus
           sudo apt-get install -y lazarus-2.2.4
 
       - name: Install FPC and Lazarus on macOS
         if: runner.os == 'macOS'
         run: |
-          # Use Homebrew to install the latest versions.
-          # For AArch64 cross-compilation, we use fpcupdeluxe to get the
-          # necessary FPC cross-compiler toolchain.
           brew install fpc lazarus
-          
           if [ "${{ matrix.config.build-mode }}" == "MACOS-AARCH64" ]; then
             # Set up the FPC cross-compiler for AArch64 using fpcupdeluxe
             curl -O "https://github.com/LongDirtyAnim/fpcupdeluxe/releases/download/latest/fpcupdeluxe_macOS_x86_64"
