@@ -1,54 +1,68 @@
 name: Build
 
-on:
+on: 
   push:
     branches:
       - master
 
+env:
+  FPC_VER: release_3_2_2
+  LAZ_VER: lazarus_2_2_4
+      
 jobs:
-  build-linux-windows:
-    runs-on: ubuntu-latest
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
     strategy:
       fail-fast: false
       matrix:
-        target:
-          - { mode: LINUX64, bin: libtpaex64.so }
-          - { mode: LINUX-AARCH64, bin: libtpaex64.so.aarch64 }
-          - { mode: WIN64, bin: libtpaex64.dll }
-          - { mode: WIN32, bin: libtpaex32.dll }
-    steps:
-      - uses: actions/checkout@v4.2.2
-      - name: Install Lazarus + FPC
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fpc lazarus \
-              gcc-multilib gcc-mingw-w64-i686 gcc-mingw-w64-x86-64
-      - name: Build
-        run: lazbuild --build-mode=${{ matrix.target.mode }} tpaex.lpi
-      - name: Upload Binary
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ matrix.target.bin }}
-          path: ${{ matrix.target.bin }}
+        config:            
+          - name: Windows 64
+            os: windows-latest
+            build-mode: WIN64
+            binary: libtpaex64.dll
+            
+          - name: Windows 32
+            os: windows-latest
+            build-mode: WIN32
+            binary: libtpaex32.dll
 
-  build-macos:
-    runs-on: macos-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        target:
-          - { mode: MACOS, bin: libtpaex64.dylib }
-          - { mode: MACOS-AARCH64, bin: libtpaex64.dylib.aarch64 }
+          - name: Linux 64
+            os: ubuntu-latest
+            build-mode: LINUX64
+            binary: libtpaex64.so
+          
+          - name: Linux AArch64  
+            os: ubuntu-latest
+            build-mode: LINUX-AARCH64
+            binary: libtpaex64.so.aarch64
+            
+          - name: MacOS 64
+            os: macos-latest
+            build-mode: MACOS
+            binary: libtpaex64.dylib
+
+          - name: MacOS AArch64
+            os: macos-latest
+            build-mode: MACOS-AARCH64
+            binary: libtpaex64.dylib.aarch64
+         
     steps:
+      - name: checkout
       - uses: actions/checkout@v4.2.2
-      - uses: sxmxta/lazarus@v1.0.18
+      
+      - name: Install Lazarus
+        uses: WaspScripts/setup-lazarus-fpcup@v3.3
         with:
-          lazarus-version: "2.2.4"
-          with-cache: false
-      - name: Build
-        run: lazbuild --build-mode=${{ matrix.target.mode }} tpaex.lpi
-      - name: Upload Binary
+          laz: ${{ env.LAZ_VER }}
+          fpc: ${{ env.FPC_VER }}
+          
+      - name: Build Library tpaex
+        run: |
+          lazbuild --build-mode=${{ matrix.config.build-mode }} tpaex.lpi
+
+      - name: Upload Binary 
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.target.bin }}
-          path: ${{ matrix.target.bin }}
+          name: ${{ matrix.config.binary }}
+          path: ${{ matrix.config.binary }}
