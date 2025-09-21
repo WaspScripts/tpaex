@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - master
-
-env:
-  FPC_VER: release_3_2_2
-  LAZ_VER: lazarus_2_2_4
       
 jobs:
   build:
@@ -51,35 +47,10 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4.2.2
       
-      - name: Install Lazarus + FPC (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fpc fpc-src lazarus
-      
-      - name: Install Lazarus + FPC
-        run: echo "Installing Lazarus and FPC..."
-        shell: bash
-
-      - name: Install Lazarus + FPC (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fpc fpc-src lazarus
-
-      - name: Install Lazarus + FPC (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          curl -L -o fpc.pkg https://downloads.sourceforge.net/project/lazarus/Lazarus%20macOS%20x86-64/${{ env.LAZ_VER }}/fpc-3.2.2.intelarm64-macosx.dmg
-          curl -L -o lazarus.pkg https://downloads.sourceforge.net/project/lazarus/Lazarus%20macOS%20x86-64/${{ env.LAZ_VER }}/lazarus-2.2.4-macosx-x86_64.pkg
-          sudo installer -pkg fpc.pkg -target /
-          sudo installer -pkg lazarus.pkg -target /
-
-      - name: Install Lazarus + FPC (Windows)
-        if: runner.os == 'Windows'
-        run: |
-          choco install lazarus --version=2.2.4 -y
-          choco install fpc --version=3.2.2 -y
+      - uses: sxmxta/lazarus@v1.0.18
+        with:
+          lazarus-version: "2.2.4"
+          with-cache: true
           
       - name: Build Library tpaex
         run: |
