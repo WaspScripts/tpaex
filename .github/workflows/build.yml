@@ -1,6 +1,6 @@
 name: Build
 
-on:
+on: 
   push:
     branches:
       - main
@@ -17,7 +17,7 @@ jobs:
             os: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-
+           
           - name: Windows 32
             os: windows-latest
             build-mode: WIN32
@@ -27,12 +27,12 @@ jobs:
             os: ubuntu-latest
             build-mode: LINUX64
             binary: libtpaex64.so
-
+           
           - name: Linux AArch64  
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
-
+               
           - name: MacOS 64
             os: macos-latest
             build-mode: MACOS
@@ -42,11 +42,11 @@ jobs:
             os: macos-latest
             build-mode: MACOS-AARCH64
             binary: libtpaex64.dylib.aarch64
-
+          
     steps:
       - name: checkout
         uses: actions/checkout@v4.2.2
-
+      
       - name: Install FPC and Lazarus on Windows
         if: runner.os == 'Windows'
         shell: pwsh
@@ -58,6 +58,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
+          
           if [ "${{ matrix.config.build-mode }}" == "LINUX-AARCH64" ]; then
             sudo dpkg --add-architecture arm64
             sudo apt-get update
@@ -65,14 +66,15 @@ jobs:
           else
             sudo apt-get install -y fpc-3.2.2
           fi
+          
           sudo apt-get install -y lazarus-2.2.4
 
       - name: Install FPC and Lazarus on macOS
         if: runner.os == 'macOS'
         run: |
           brew install fpc lazarus
+          
           if [ "${{ matrix.config.build-mode }}" == "MACOS-AARCH64" ]; then
-            # Set up the FPC cross-compiler for AArch64 using fpcupdeluxe
             curl -O "https://github.com/LongDirtyAnim/fpcupdeluxe/releases/download/latest/fpcupdeluxe_macOS_x86_64"
             chmod +x fpcupdeluxe_macOS_x86_64
             ./fpcupdeluxe_macOS_x86_64 --nobuilddir --nodownloadfpcsrc --nobuildlazarussrc --fpcver=3.2.2 --lazver=2.2.4 --crosscompiler-aarch64
@@ -82,7 +84,7 @@ jobs:
         run: |
           lazbuild --build-mode=${{ matrix.config.build-mode }} tpaex.lpi
 
-      - name: Upload Binary
+      - name: Upload Binary 
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.config.binary }}
