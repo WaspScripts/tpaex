@@ -4,11 +4,7 @@ on:
   push:
     branches:
       - main
-
-env:
-  FPC_VER: release_3_2_2
-  LAZ_VER: lazarus_2_2_4
-      
+       
 jobs:
   build:
     name: ${{ matrix.config.name }}
@@ -16,12 +12,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        config:            
+        config:             
           - name: Windows 64
             os: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-            
+           
           - name: Windows 32
             os: windows-latest
             build-mode: WIN32
@@ -31,12 +27,12 @@ jobs:
             os: ubuntu-latest
             build-mode: LINUX64
             binary: libtpaex64.so
-          
-          - name: Linux AArch64  
+           
+          - name: Linux AArch64  
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
-            
+               
           - name: MacOS 64
             os: macos-latest
             build-mode: MACOS
@@ -46,50 +42,56 @@ jobs:
             os: macos-latest
             build-mode: MACOS-AARCH64
             binary: libtpaex64.dylib.aarch64
-         
+          
     steps:
       - name: checkout
         uses: actions/checkout@v4.2.2
       
-      - name: Install FPC and Lazarus
-        shell: bash
+      - name: Install FPC and Lazarus on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
         run: |
-          echo "Installing Lazarus and FPC..."
-          FPCCUP_DIR="${HOME}/fpcupdeluxe"
-          mkdir -p "${FPCCUP_DIR}"
+          # Use Chocolatey to install the required versions
+          choco install fpc --version=3.2.2
+          choco install lazarus --version=2.2.4
 
-          case "${{ runner.os }}" in
-            Windows)
-              powershell -command "Invoke-WebRequest -Uri 'https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-win64.zip' -OutFile '${FPCCUP_DIR}/fpcupdeluxe.zip'; Expand-Archive -Path '${FPCCUP_DIR}/fpcupdeluxe.zip' -DestinationPath '${FPCCUP_DIR}' -Force"
-              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe.exe"
-              ;;
-            Linux)
-              curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-linux" -o "${FPCCUP_DIR}/fpcupdeluxe"
-              chmod +x "${FPCCUP_DIR}/fpcupdeluxe"
-              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe"
-              ;;
-            macOS)
-              curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-darwin" -o "${FPCCUP_DIR}/fpcupdeluxe"
-              chmod +x "${FPCCUP_DIR}/fpcupdeluxe"
-              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe"
-              ;;
-          esac
-
-          "$FPCCUP_CMD" --fpc="${{ env.FPC_VER }}" --laz="${{ env.LAZ_VER }}"
+      - name: Install FPC and Lazarus on Linux
+        if: runner.os == 'Linux'
+        run: |
+          # The standard repositories often have older versions, so we download the
+          # .deb files directly from the Lazarus project and install them.
+          # For cross-compilation to AArch64, we also install the cross-compiler package.
+          sudo apt-get update
           
-          if [ "${{ matrix.config.build-mode }}" == "WIN32" ]; then
-            echo "Installing Windows 32-bit cross-compiler..."
-            "$FPCCUP_CMD" --onlycross --fpc="${{ env.FPC_VER }}" --target-os=win64 --target-cpu=i386
-          elif [ "${{ matrix.config.build-mode }}" == "LINUX-AARCH64" ]; then
-            echo "Installing Linux AArch64 cross-compiler..."
-            "$FPCCUP_CMD" --onlycross --fpc="${{ env.FPC_VER }}" --target-os=linux --target-cpu=aarch64
-          elif [ "${{ matrix.config.build-mode }}" == "MACOS-AARCH64" ]; then
-            echo "Installing macOS AArch64 cross-compiler..."
-            "$FPCCUP_CMD" --onlycross --fpc="${{ env.FPC_VER }}" --target-os=darwin --target-cpu=aarch64
+          if [ "${{ matrix.config.build-mode }}" == "LINUX-AARCH64" ]; then
+            # Add architecture for cross-compilation
+            sudo dpkg --add-architecture arm64
+            sudo apt-get update
+            # Install FPC cross-compiler
+            sudo apt-get install -y fpc-3.2.2-cross-aarch64
+          else
+            # Install standard FPC for the host architecture
+            sudo apt-get install -y fpc-3.2.2
+          fi
+          
+          # Install Lazarus
+          sudo apt-get install -y lazarus-2.2.4
+
+      - name: Install FPC and Lazarus on macOS
+        if: runner.os == 'macOS'
+        run: |
+          # Use Homebrew to install the latest versions.
+          # For AArch64 cross-compilation, we use fpcupdeluxe to get the
+          # necessary FPC cross-compiler toolchain.
+          brew install fpc lazarus
+          
+          if [ "${{ matrix.config.build-mode }}" == "MACOS-AARCH64" ]; then
+            # Set up the FPC cross-compiler for AArch64 using fpcupdeluxe
+            curl -O "https://github.com/LongDirtyAnim/fpcupdeluxe/releases/download/latest/fpcupdeluxe_macOS_x86_64"
+            chmod +x fpcupdeluxe_macOS_x86_64
+            ./fpcupdeluxe_macOS_x86_64 --nobuilddir --nodownloadfpcsrc --nobuildlazarussrc --fpcver=3.2.2 --lazver=2.2.4 --crosscompiler-aarch64
           fi
 
-          echo "${HOME}/lazarus/laz.bin" >> "${GITHUB_PATH}"
-          
       - name: Build Library tpaex
         run: |
           lazbuild --build-mode=${{ matrix.config.build-mode }} tpaex.lpi
