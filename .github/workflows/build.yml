@@ -3,7 +3,7 @@ name: Build
 on: 
   push:
     branches:
-      - master
+      - main
 
 env:
   FPC_VER: release_3_2_2
@@ -21,59 +21,75 @@ jobs:
             os: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%202.0.12/lazarus-2.0.12-fpc-3.2.0-win64.exe
-
+            
           - name: Windows 32
             os: windows-latest
             build-mode: WIN32
             binary: libtpaex32.dll
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%202.0.12/lazarus-2.0.12-fpc-3.2.0-win32.exe
 
           - name: Linux 64
             os: ubuntu-latest
             build-mode: LINUX64
             binary: libtpaex64.so
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/lazarus-project_2.0.12-0_amd64.deb 
-            fpc-url: |
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-laz_3.2.0-1_amd64.deb
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-src_3.2.0-1_amd64.deb
           
           - name: Linux AArch64  
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/lazarus-project_2.0.12-0_amd64.deb 
-            fpc-url: |
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-laz_3.2.0-1_amd64.deb
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.0.12/fpc-src_3.2.0-1_amd64.deb
             
           - name: MacOS 64
             os: macos-latest
             build-mode: MACOS
             binary: libtpaex64.dylib
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/Lazarus-2.0.12-x86_64-macosx.pkg
-            fpc-url: |
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-3.2.0.intel-macosx.dmg
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-src-3.2.0-2-laz.pkg  
 
           - name: MacOS AArch64
             os: macos-latest
             build-mode: MACOS-AARCH64
             binary: libtpaex64.dylib.aarch64
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/Lazarus-2.0.12-x86_64-macosx.pkg
-            fpc-url: |
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-3.2.0.intel-macosx.dmg
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.0.12/fpc-src-3.2.0-2-laz.pkg  
          
     steps:
       - name: checkout
         uses: actions/checkout@v4.2.2
       
-      - name: Install Lazarus
-        uses: ollydev/setup-lazarus@v2
-        with:
-          laz-url: ${{ matrix.config.laz-url }}
-          fpc-url: ${{ matrix.config.fpc-url }}
+      - name: Install FPC and Lazarus
+        shell: bash
+        run: |
+          echo "Installing Lazarus and FPC..."
+          FPCCUP_DIR="${HOME}/fpcupdeluxe"
+          mkdir -p "${FPCCUP_DIR}"
+
+          case "${{ runner.os }}" in
+            Windows)
+              curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-win64.zip" -o "${FPCCUP_DIR}/fpcupdeluxe.zip"
+              unzip -q "${FPCCUP_DIR}/fpcupdeluxe.zip" -d "${FPCCUP_DIR}"
+              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe"
+              ;;
+            Linux)
+              curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-linux" -o "${FPCCUP_DIR}/fpcupdeluxe"
+              chmod +x "${FPCCUP_DIR}/fpcupdeluxe"
+              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe"
+              ;;
+            macOS)
+              curl -sL "https://github.com/LongDirtyAnimAlf/fpcupdeluxe/releases/download/v1.9.1/fpcupdeluxe-x86_64-darwin" -o "${FPCCUP_DIR}/fpcupdeluxe"
+              chmod +x "${FPCCUP_DIR}/fpcupdeluxe"
+              FPCCUP_CMD="${FPCCUP_DIR}/fpcupdeluxe"
+              ;;
+          esac
+
+          "$FPCCUP_CMD" --fpc="${{ env.FPC_VER }}" --laz="${{ env.LAZ_VER }}"
+          
+          if [ "${{ matrix.config.build-mode }}" == "WIN32" ]; then
+            echo "Installing Windows 32-bit cross-compiler..."
+            "$FPCCUP_CMD" --onlycross --fpc="${{ env.FPC_VER }}" --target-os=win64 --target-cpu=i386
+          elif [ "${{ matrix.config.build-mode }}" == "LINUX-AARCH64" ]; then
+            echo "Installing Linux AArch64 cross-compiler..."
+            "$FPCCUP_CMD" --onlycross --fpc="${{ env.FPC_VER }}" --target-os=linux --target-cpu=aarch64
+          elif [ "${{ matrix.config.build-mode }}" == "MACOS-AARCH64" ]; then
+            echo "Installing macOS AArch64 cross-compiler..."
+            "$FPCCUP_CMD" --onlycross --fpc="${{ env.FPC_VER }}" --target-os=darwin --target-cpu=aarch64
+          fi
+
+          echo "${HOME}/lazarus/laz.bin" >> "${GITHUB_PATH}"
           
       - name: Build Library tpaex
         run: |
