@@ -51,6 +51,13 @@ jobs:
         with:
           lazarus-version: "2.2.4"
           with-cache: false
+      
+      - name: Install FPC 32-bit
+        if: matrix.config.build-mode == 'WIN32'
+        run: |
+          curl -L -o fpc32.exe https://downloads.sourceforge.net/project/freepascal/Win32/3.2.2/fpc-3.2.2.i386-win32.exe
+          fpc32.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART
+          echo "C:\FPC\3.2.2\bin\i386-win32" >> $env:GITHUB_PATH
           
       - name: Build Library tpaex
         run: |
