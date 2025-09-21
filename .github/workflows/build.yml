@@ -1,34 +1,53 @@
 name: Build
 
-on: 
+on:
   push:
     branches:
       - master
-      
+
 jobs:
-  build:
+  build-linux-windows:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         target:
-          - { mode: LINUX64,    bin: libtpaex64.so }
+          - { mode: LINUX64, bin: libtpaex64.so }
           - { mode: LINUX-AARCH64, bin: libtpaex64.so.aarch64 }
-          - { mode: WIN64,      bin: libtpaex64.dll }
-          - { mode: WIN32,      bin: libtpaex32.dll }
+          - { mode: WIN64, bin: libtpaex64.dll }
+          - { mode: WIN32, bin: libtpaex32.dll }
     steps:
       - uses: actions/checkout@v4.2.2
-      
-      - name: Install deps
+      - name: Install Lazarus + FPC
         run: |
           sudo apt-get update
-          sudo apt-get install -y fpc fpc-src lazarus \
+          sudo apt-get install -y fpc lazarus \
               gcc-multilib gcc-mingw-w64-i686 gcc-mingw-w64-x86-64
-
-      - name: Build ${{ matrix.target.mode }}
+      - name: Build
         run: lazbuild --build-mode=${{ matrix.target.mode }} tpaex.lpi
+      - name: Upload Binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.target.bin }}
+          path: ${{ matrix.target.bin }}
 
-      - name: Upload binary
+  build-macos:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - { mode: MACOS, bin: libtpaex64.dylib }
+          - { mode: MACOS-AARCH64, bin: libtpaex64.dylib.aarch64 }
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - uses: sxmxta/lazarus@v1.0.18
+        with:
+          lazarus-version: "2.2.4"
+          with-cache: false
+      - name: Build
+        run: lazbuild --build-mode=${{ matrix.target.mode }} tpaex.lpi
+      - name: Upload Binary
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.target.bin }}
