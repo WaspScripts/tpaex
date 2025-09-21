@@ -32,7 +32,7 @@ jobs:
             os: ubuntu-latest
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
-               
+          
           - name: MacOS 64
             os: macos-latest
             build-mode: MACOS
