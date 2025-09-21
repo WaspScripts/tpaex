@@ -50,7 +50,7 @@ jobs:
       - uses: sxmxta/lazarus@v1.0.18
         with:
           lazarus-version: "2.2.4"
-          with-cache: true
+          with-cache: false
           
       - name: Build Library tpaex
         run: |
