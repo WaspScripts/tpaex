@@ -58,7 +58,7 @@ jobs:
             binary: libtpaex64.dylib.aarch64
             fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-aarch64-darwin
             fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
-            fpclazup-fpccommit: aa8050f30ce7a23f8881de844c07c0f17033409e # trunk (~3.3)
+            fpclazup-fpccommit: d3a5f442eeff766a60cd7177536a9db7cc54875c # 3.2.4
 
           - name: Mac Intel
             runs-on: macos-15-intel
@@ -66,7 +66,7 @@ jobs:
             binary: libtpaex64.dylib
             fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-x86_64-darwin
             fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
-            fpclazup-fpccommit: aa8050f30ce7a23f8881de844c07c0f17033409e # trunk (~3.3)
+            fpclazup-fpccommit: d3a5f442eeff766a60cd7177536a9db7cc54875c # 3.2.4
 
     steps:
       - name: Checkout
