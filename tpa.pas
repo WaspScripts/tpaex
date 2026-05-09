@@ -171,6 +171,7 @@ begin
   if not b.Contains(start) then Exit;
   if not b.Contains(goal) then Exit;
 
+  size := 0;
   offset.X := b.X1;
   offset.Y := b.Y1;
   start.X -= offset.X;
@@ -257,6 +258,7 @@ begin
   if not b.Contains(start) then Exit;
   if not b.Contains(goal) then Exit;
 
+  size := 0;
   offset.X := b.X1;
   offset.Y := b.Y1;
   start.X -= offset.X;
