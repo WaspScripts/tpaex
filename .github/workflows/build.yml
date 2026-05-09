@@ -1,68 +1,90 @@
 name: Build
 
-on: 
+on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
-env:
-  FPC_VER: release_3_2_2
-  LAZ_VER: lazarus_2_2_4
-      
 jobs:
   build:
     name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    runs-on: ${{ matrix.config.runs-on }}
+    defaults:
+      run:
+        shell: bash
+
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        config:            
-          - name: Windows 64
-            os: windows-latest
+        config:
+          - name: Win64
+            runs-on: windows-latest
             build-mode: WIN64
             binary: libtpaex64.dll
-            
-          - name: Windows 32
-            os: windows-latest
+            fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-x86_64-win64.exe
+            fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
+            fpclazup-fpccommit: d3a5f442eeff766a60cd7177536a9db7cc54875c # 3.2.4
+
+          - name: Win32
+            runs-on: windows-latest
             build-mode: WIN32
             binary: libtpaex32.dll
+            fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-x86_64-win64.exe
+            fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
+            fpclazup-fpccommit: d3a5f442eeff766a60cd7177536a9db7cc54875c # 3.2.4
 
-          - name: Linux 64
-            os: ubuntu-latest
+          - name: Linux64
+            runs-on: ubuntu-22.04
             build-mode: LINUX64
             binary: libtpaex64.so
-          
-          - name: Linux AArch64  
-            os: ubuntu-latest
+            fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-x86_64-linux
+            fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
+            fpclazup-fpccommit: d3a5f442eeff766a60cd7177536a9db7cc54875c # 3.2.4
+
+          - name: Linux Arm64
+            runs-on: ubuntu-22.04-arm
             build-mode: LINUX-AARCH64
             binary: libtpaex64.so.aarch64
-            
-          - name: MacOS 64
-            os: macos-latest
-            build-mode: MACOS
-            binary: libtpaex64.dylib
+            fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-aarch64-linux
+            fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
+            fpclazup-fpccommit: d3a5f442eeff766a60cd7177536a9db7cc54875c # 3.2.4
 
-          - name: MacOS AArch64
-            os: macos-latest
+          - name: Mac Arm64
+            runs-on: macos-26
             build-mode: MACOS-AARCH64
             binary: libtpaex64.dylib.aarch64
-         
+            fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-aarch64-darwin
+            fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
+            fpclazup-fpccommit: aa8050f30ce7a23f8881de844c07c0f17033409e # trunk (~3.3)
+
+          - name: Mac Intel
+            runs-on: macos-15-intel
+            build-mode: MACOS
+            binary: libtpaex64.dylib
+            fpclazup-url: https://github.com/LongDirtyAnimAlf/Reiniero-fpcup/releases/download/v2.4.0g/fpclazup-x86_64-darwin
+            fpclazup-lazcommit: 98f9c7a7a102139e43b39050ebbb5c48d805f59f # 4.4
+            fpclazup-fpccommit: aa8050f30ce7a23f8881de844c07c0f17033409e # trunk (~3.3)
+
     steps:
       - name: checkout
-        uses: actions/checkout@v4.2.2
-      
-      - name: Install Lazarus
-        uses: WaspScripts/setup-lazarus-fpcup@v3.3
+        uses: actions/checkout@v6.0.1
+
+      - name: Install Custom Lazarus
+        uses: ollydev/setup-lazarus@v4
         with:
-          laz: ${{ env.LAZ_VER }}
-          fpc: ${{ env.FPC_VER }}
-          
+          fpclazup-url: ${{ matrix.config.fpclazup-url }}
+          fpclazup-lazcommit: ${{ matrix.config.fpclazup-lazcommit }}
+          fpclazup-fpccommit: ${{ matrix.config.fpclazup-fpccommit }}
+
       - name: Build Library tpaex
         run: |
           lazbuild --build-mode=${{ matrix.config.build-mode }} tpaex.lpi
 
-      - name: Upload Binary 
-        uses: actions/upload-artifact@v4
+      - name: Upload Simba Binary
+        uses: actions/upload-artifact@v6.0.0
         with:
           name: ${{ matrix.config.binary }}
           path: ${{ matrix.config.binary }}
