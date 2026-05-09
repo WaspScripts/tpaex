@@ -3,10 +3,10 @@ name: Build
 on:
   push:
     branches:
-      - main
+      - "*"
   pull_request:
     branches:
-      - main
+      - "*"
 
 jobs:
   build:
@@ -88,3 +88,67 @@ jobs:
         with:
           name: ${{ matrix.config.binary }}
           path: ${{ matrix.config.binary }}
+
+  release:
+    needs: build
+    if: ${{ success() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.1
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "Wasp Bot"
+          git config --global user.email "waspbot@waspcripts.com"
+
+      - name: Get current date and commit hash
+        run: |
+          echo "CURRENT_YEAR=$(date +'%Y')" >> $GITHUB_ENV
+          echo "CURRENT_MONTH=$(date +'%m')" >> $GITHUB_ENV
+          echo "CURRENT_DAY=$(date +'%d')" >> $GITHUB_ENV
+          echo "COMMIT_HASH=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+          TAG_NAME="$(date +'%Y').$(date +'%m').$(date +'%d')-$(git rev-parse --short HEAD)"
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+      - name: Create tag
+        run: |
+          git tag ${{ env.TAG_NAME }}
+          git push origin ${{ env.TAG_NAME }}
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List downloaded artifacts
+        run: |
+          ls -la artifacts/
+          find artifacts/ -type f
+
+      - name: Create zip archive of all binaries
+        run: |
+          mkdir -p tpaex
+          find artifacts/ -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib*" \) -exec cp {} tpaex/ \;
+          zip -r ${{ env.TAG_NAME }}.zip tpaex/
+          echo "Created zip archive: ${{ env.TAG_NAME }}.zip"
+
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BINARY_FILES=$(find artifacts/ -type f \( -name "*.dll" -o -name "*.so" -o -name "*.dylib*" \) | tr '\n' ' ')
+
+          if [ -z "$BINARY_FILES" ]; then
+            echo "No binary files found to upload!"
+            exit 1
+          fi
+
+          gh release create ${{ env.TAG_NAME }} \
+            $BINARY_FILES \
+             ${{ env.TAG_NAME }}.zip \
+            --title "${{ env.TAG_NAME }}" \
+            --notes "Automated plugin release built from commit ${{ env.COMMIT_HASH }}"
