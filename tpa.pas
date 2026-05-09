@@ -35,9 +35,6 @@ function AStarTPA(tpa: TPointArray; start, goal: TPoint; diagonalTravel: Boolean
 
 implementation
 
-uses Math;
-
-
 function TPAMatrix(tpa: TPointArray): T2DBoolArray;
 var
   b: TBox;
@@ -168,8 +165,8 @@ var
   offset, q, p: TPoint;
 begin
   b := GetTPABounds(tpa);
-  if not b.Contains(start) then Exit;
-  if not b.Contains(goal) then Exit;
+  if not b.Contains(start) then Exit([]);
+  if not b.Contains(goal) then Exit([]);
 
   size := 0;
   offset.X := b.X1;
@@ -188,8 +185,8 @@ begin
   for p in tpa do
     matrix[p.Y - offset.Y, p.X - offset.X] := True;
 
-  if not matrix[start.Y, start.X] then Exit;
-  if not matrix[goal.Y, goal.X] then Exit;
+  if not matrix[start.Y, start.X] then Exit([]);
+  if not matrix[goal.Y, goal.X] then Exit([]);
 
   SetLength(paths, 0);
   SetLength(paths, offset.Y + b.Y2+1, offset.X + b.X2+1);
@@ -199,6 +196,7 @@ begin
 
   node.Pt := start;
   node.Weight := data[start.Y, start.X].ScoreB;
+  SetLength(queue, 0);
   _Push(queue, node, data, size);
 
   if diagonalTravel then hi := 7 else hi := 3;
@@ -255,8 +253,8 @@ var
   offset, q, p: TPoint;
 begin
   b := GetTPABounds(tpa);
-  if not b.Contains(start) then Exit;
-  if not b.Contains(goal) then Exit;
+  if not b.Contains(start) then Exit([]);
+  if not b.Contains(goal) then Exit([]);
 
   size := 0;
   offset.X := b.X1;
@@ -275,8 +273,8 @@ begin
   for p in tpa do
     matrix[p.Y - offset.Y, p.X - offset.X] := True;
 
-  if not matrix[start.Y, start.X] then Exit;
-  if not matrix[goal.Y, goal.X] then Exit;
+  if not matrix[start.Y, start.X] then Exit([]);
+  if not matrix[goal.Y, goal.X] then Exit([]);
 
   SetLength(data, b.Y2 + 1, b.X2 + 1);
 
@@ -284,6 +282,7 @@ begin
 
   node.Pt := start;
   node.Weight := data[start.Y, start.X].ScoreB;
+  SetLength(queue, 0);
   _Push(queue, node, data, size);
 
   if diagonalTravel then hi := 7 else hi := 3;
